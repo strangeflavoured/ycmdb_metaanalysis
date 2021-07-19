@@ -106,8 +106,9 @@ def getIons(m_original, medium, row, total):
 	for i in range(len(masses)):
 		total, comp, value=getOneIon(total,total_names[i],comp,orig_comp,symbols[i],
 			names[i],formula,value,mask,m_original,masses[i])
-		if value in [np.nan]:
-			print(orig_comp,comp)
+		#if some components are nan checker
+		#if value in [np.nan]:
+		#	print(orig_comp,comp)
 
 	orig=comp
 	comp,value=replace_hydrate(comp,value,m_original)
