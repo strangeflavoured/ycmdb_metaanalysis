@@ -106,7 +106,7 @@ def analysis(clean_unit=False, full=False):
 			#do some conversions on medium composition (c.f. mediumConversion.py)
 			#return contains each medium's composition in single row
 			media_matrix=mediumConversion(connection)
-			print(media_matrix.columns)
+			
 			#restore uID from index to coĺumn
 			media_matrix['uniqueID'] = media_matrix.index
 
