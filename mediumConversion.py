@@ -246,9 +246,9 @@ def mediumConversion(con):
 	outmatrix=outmatrix.reset_index()
 
 	#sum ions	
-	total_quantities=['Medium_uniqueID','total BO3', 'total Cl',
+	total_quantities=['Medium_uniqueID','total BO3', 'total Ca','total Cl',
 		'total Co', 'total Cu', 'total Fe', "total I",'total K', 'total Mg', 'total Mn',
-		'total Mo', 'total NH4', 'total NO3', 'total Na','total Ca',
+		'total Mo', 'total NH4', 'total NO3', 'total Na',
 		'total Ni', 'total PO4', 'total SO4', 'total Se', 'total Zn']
 	total=pd.DataFrame(columns=total_quantities)
 	total["Medium_uniqueID"]=outmatrix["Medium_uniqueID"].unique()

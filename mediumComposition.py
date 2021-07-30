@@ -71,12 +71,12 @@ def getStochiometry(element, formula):
 #removes ion name from component name
 #removes ion amount from orig. component
 #returns total, adjusted component name and value
-def getOneIon(total,total_name,comp,orig_comp,symbol,name,formula,value,mask,m_original,mass):
+def getOneIon(total,total_name,comp,orig_comp,symbol,name,formula,value,mask,m_original,mass,orig_value):
 	if re.search(re.compile(name,re.IGNORECASE), comp):
 		n=getStochiometry(symbol, formula)
 		if n: 
-			total[total_name][mask]+=value*n*mass/m_original
-			value-=value*n*mass/m_original
+			total[total_name][mask]+=orig_value*n*mass/m_original
+			value-=orig_value*n*mass/m_original
 			comp=re.sub(re.compile(f"\s*[A-z]*{name}[A-z]*\(*i*\)*", re.IGNORECASE),"", comp).strip()
 	return total, comp, value
 
@@ -88,6 +88,7 @@ def getIons(m_original, medium, row, total):
 	orig_comp=row["Component"]
 	formula=row["Formula"]
 	value=row["Value_g_l"]
+	orig_value=row["Value_g_l"]
 	total_names=total.columns[1:]
 	symbols=['B', 'Ca', 'Cl', 'Co', 'Cu', 'Fe', 'I', 'K', 'Mg', 'Mn', 'Mo',
 		'N', 'N', 'Na', 'Ni', 'P', 'S', 'Se', 'Zn']
@@ -98,14 +99,12 @@ def getIons(m_original, medium, row, total):
 	#molar masses in g/mol
 	masses=[m_BO3, m_Ca, m_Cl, m_Co, m_Cu, m_Fe, m_I, m_K, m_Mg, m_Mn, m_Mo,
 		m_NH4, m_NO3, m_Na, m_Ni, m_PO4, m_SO4, m_Se, m_Zn]
-	#check for expression in medium component
-	#if re.search(re.compile(expr, re.IGNORECASE), comp):
-
+	
 	mask=total["Medium_uniqueID"]==medium
 	#extract concentration for ions
 	for i in range(len(masses)):
 		total, comp, value=getOneIon(total,total_names[i],comp,orig_comp,symbols[i],
-			names[i],formula,value,mask,m_original,masses[i])
+			names[i],formula,value,mask,m_original,masses[i],orig_value)
 		#if some components are nan checker
 		#if value in [np.nan]:
 		#	print(orig_comp,comp)

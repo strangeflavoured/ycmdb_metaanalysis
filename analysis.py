@@ -5,21 +5,15 @@ import seaborn as sns
 import pymysql, csv, re
 from sqlalchemy import create_engine
 import pickle, math
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.impute import SimpleImputer
 
 #imports from other files
 from mediumConversion import mediumConversion
-import config
 
 #pull and process data from database
 #returns glucose uptake, medium and strain data
-def analysis(clean_unit=False, full=False):
+def analysis(path, clean_unit=False, full=False):
 
-	#create mysql connection
-	path=f"mysql+pymysql://{config.USER}:{config.PASSWORD}@{config.HOST}/{config.DB_NAME}"
-	
+	#create mysql connection	
 	with create_engine(path).connect() as connection:
 		#disable ONLY_FULL_GROUP_BY
 		connection.execute("""set sql_mode=(select replace(@@sql_mode,
@@ -249,15 +243,3 @@ def multivalueCols(df):
 				subs[val]=i
 			df[col]=df[col].replace(subs)
 	return df
-
-
-def feature_pca(features, n_components="mle"):
-	features=multivalueCols(features)
-	x=features.iloc[:,1:].values
-	y=features.iloc[:,0].values
-	x = StandardScaler().fit_transform(x)
-	imp = SimpleImputer(missing_values=np.nan, strategy='most_frequent')
-	x=imp.fit_transform(x)
-	pca=PCA(n_components=n_components)
-	principalComponents = pca.fit_transform(x)
-	return principalComponents

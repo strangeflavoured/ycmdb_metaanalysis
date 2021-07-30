@@ -2,16 +2,19 @@
 #analysis routines for YCMDB database
 #implemented: glucose uptake data
 
-from analysis import analysis, feature_matrix, pairplot, feature_pca
+import config
+from analysis import analysis, feature_matrix, pairplot
+
+#sql connection
+path=f"mysql+pymysql://{config.USER}:{config.PASSWORD}@{config.HOST}/{config.DB_NAME}"
 
 #run analysis
-data, strain_matrix, media_matrix=analysis(clean_unit=True,full=False)
+data, strain_matrix, media_matrix=analysis(path,clean_unit=True,full=True)
 
 features=feature_matrix(data, media_matrix, strain_matrix)
 
-#pairplot(features)
+pairplot(features)
 
-feature_pca(features)
 
 #if required: save data as csv
 #with open("analysis.csv", "w+") as file:
